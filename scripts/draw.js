@@ -13,10 +13,11 @@ export const BALL_RADIUS = 8;
 const BALL_COLOR = "#0095DD";
 export const BALL_OFFSET_LEFT = CANVAS_WIDTH / 2; // 横向居中对齐
 export const BALL_OFFSET_TOP = CANVAS_HEIGHT * 0.8;
-export const INITIAL_ANGLE = 80; // 起始发球角度，相对于x轴
+export const INITIAL_ANGLE = 150; // 起始发球角度，相对于x轴
+export const BALL_SHIFT_STEP = 4; // 横向移动距离
 
 // 砖块
-const BRICKS = [
+export const BRICKS = [
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -25,12 +26,11 @@ const BRICKS = [
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ];
 
-const BRICK_HEIGHT = 20;
-const BRICK_WIDTH = 50;
-const BRICK_GAP = 2;
-const BRICK_OFFSET_TOP = 10;
-const BRICK_OFFSET_LEFT = 10;
-export const BALL_SHIFT_STEP = 0.7; // 横向移动距离
+export const BRICK_HEIGHT = 20;
+export const BRICK_WIDTH = 50;
+export const BRICK_GAP = 2;
+export const BRICK_OFFSET_TOP = 10;
+export const BRICK_OFFSET_LEFT = 10;
 
 // 接板
 export const PADDLE_HEIGHT = 8;
@@ -56,7 +56,7 @@ export function drawPaddle(ctx, x, y) {
   ctx.closePath();
 }
 
-export function drawBricks(ctx) {
+export function drawBricks(ctx, BRICKS) {
   for (let r = 0; r < BRICKS.length; r++) {
     for (let c = 0; c < BRICKS[0].length; c++) {
       if (BRICKS[r][c] === 1) {

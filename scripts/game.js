@@ -2,6 +2,7 @@ import {
   BALL_OFFSET_LEFT,
   BALL_OFFSET_TOP,
   BALL_RADIUS,
+  BRICKS,
   CANVAS_HEIGHT,
   CANVAS_WIDTH,
   INITIAL_ANGLE,
@@ -17,7 +18,7 @@ import {
   drawBricks,
   drawPaddle,
 } from "./draw.js";
-import { delay, getBallCoordinate } from "./utils.js";
+import { deepClone, getBallCoordinate, getBrickCoordinate } from "./utils.js";
 
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
@@ -38,6 +39,8 @@ let rightPressed = false,
 let [paddleX, paddleY] = [PADDLE_OFFSET_LEFT, PADDLE_OFFSET_TOP];
 let [ballX, ballY] = [BALL_OFFSET_LEFT, BALL_OFFSET_TOP];
 let angle = INITIAL_ANGLE;
+
+let bricks = deepClone(BRICKS);
 
 function keyDownHandler(e) {
   const { keyCode } = e;
@@ -70,6 +73,9 @@ function resetGame() {
   [paddleX, paddleY] = [PADDLE_OFFSET_LEFT, PADDLE_OFFSET_TOP];
   [ballX, ballY] = [BALL_OFFSET_LEFT, BALL_OFFSET_TOP];
   angle = INITIAL_ANGLE;
+
+  // 砖块
+  bricks = deepClone(BRICKS);
 }
 
 function clearCanvas() {
@@ -80,7 +86,7 @@ function draw() {
   clearCanvas();
   // 游戏绘制逻辑
   drawBall(ctx, ballX, ballY);
-  // drawBricks(ctx);
+  drawBricks(ctx, bricks);
   drawPaddle(ctx, paddleX, paddleY);
 }
 
@@ -106,31 +112,19 @@ function updateBall() {
   // 没有接到球：球的最下方超过了板子的最下方
   if (ballY + BALL_RADIUS > paddleY + PADDLE_HEIGHT) {
     alert("失败");
-    delay(3000).then(() => {
-      resetGame();
-    });
+    resetGame();
     return;
   }
 
   // 碰撞检测
   // 碰到了画布边缘, 反弹
-  // 碰到了左边
-  if (ballX < BALL_RADIUS) {
-    angle = 180 - angle;
-    ballX = BALL_RADIUS;
-  }
+  hitLeft(0);
 
   // 碰到了右边
-  if (ballX > canvas.width - BALL_RADIUS) {
-    angle = 180 - angle;
-    ballX = canvas.width - BALL_RADIUS;
-  }
+  hitRight(canvas.width);
 
   // 碰到了上边
-  if (ballY < BALL_RADIUS) {
-    angle = -angle;
-    ballY = BALL_RADIUS;
-  }
+  hitTop(0);
 
   // 碰到了板子
   if (
@@ -141,6 +135,81 @@ function updateBall() {
   ) {
     angle = -angle;
     ballY = paddleY - BALL_RADIUS;
+  }
+
+  // 碰到了砖块
+  // hitBricks();
+}
+
+function hitBricks() {
+  // 砖块碰撞检测
+  for (let r = 0; r < bricks.length; r++) {
+    for (let c = 0; c < bricks[0].length; c++) {
+      if (bricks[r][c] === 1) {
+        hitEdge(r, c);
+      }
+    }
+  }
+  // 碰到了砖块
+  // 未碰到砖块
+}
+
+function removeBrick(r, c) {
+  // 砖块被消除
+  bricks[r][c] === 0;
+}
+
+function hitEdge(r, c) {
+  const { left, right, top, bottom } = getBrickCoordinate(r, c);
+
+  // 碰到了右边
+  hitLeft(right, removeBrick);
+
+  // 碰到了右边
+  hitRight(left, removeBrick);
+
+  // 碰到了上边
+  hitTop(bottom, removeBrick);
+
+  // 碰到了下边
+  hitBottom(top, removeBrick);
+}
+
+function hitLeft(left, hitCallback) {
+  const border = left + BALL_RADIUS;
+  if (ballX < border) {
+    angle =
+      angle > 0 ? (180 - Math.abs(angle)) % 180 : (Math.abs(angle) - 180) % 180;
+    ballX = border;
+    hitCallback?.();
+  }
+}
+
+function hitRight(right, hitCallback) {
+  const border = right - BALL_RADIUS;
+  if (ballX > border) {
+    angle =
+      angle > 0 ? (180 - Math.abs(angle)) % 180 : (Math.abs(angle) - 180) % 180;
+    ballX = border;
+    hitCallback?.();
+  }
+}
+
+function hitTop(top, hitCallback) {
+  const border = top + BALL_RADIUS;
+  if (ballY < border) {
+    angle = -angle;
+    ballY = border;
+    hitCallback?.();
+  }
+}
+
+function hitBottom(bottom, hitCallback) {
+  const border = bottom - BALL_RADIUS;
+  if (ballY < border) {
+    angle = -angle;
+    ballY = border;
+    hitCallback?.();
   }
 }
 

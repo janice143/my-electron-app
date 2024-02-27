@@ -1,7 +1,15 @@
-import { BALL_SHIFT_STEP } from "./draw.js";
+import {
+  BALL_SHIFT_STEP,
+  BRICK_GAP,
+  BRICK_HEIGHT,
+  BRICK_OFFSET_LEFT,
+  BRICK_OFFSET_TOP,
+  BRICK_WIDTH,
+} from "./draw.js";
 // 根据起始角度和位置计算移动的距离
 export function getBallCoordinate(x0, y0, angle) {
   //  yo - y = k * (x-x0) = tan(angle) * (x-x0)
+  // -180 <= angle <= 180
   const k = Math.tan((angle / 180) * Math.PI);
   let [x, y] = [x0, y0];
 
@@ -15,15 +23,18 @@ export function getBallCoordinate(x0, y0, angle) {
   return { x, y };
 }
 
-export function delay(seconds) {
-  return new Promise((resolve) => {
-    // 将秒转换为毫秒
-    const milliseconds = seconds * 1000;
+export function deepClone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
 
-    // 创建一个定时器
-    const timerId = setTimeout(() => {
-      clearTimeout(timerId); // 清除定时器
-      resolve(); // 完成Promise
-    }, milliseconds);
-  });
+export function getBrickCoordinate(r, c) {
+  let brickX = c * (BRICK_WIDTH + BRICK_GAP) + BRICK_OFFSET_LEFT;
+  let brickY = r * (BRICK_HEIGHT + BRICK_GAP) + BRICK_OFFSET_TOP;
+
+  const left = brickX;
+  const right = brickX + BRICK_WIDTH;
+  const top = brickY;
+  const bottom = brickY + BRICK_HEIGHT;
+
+  return { left, right, top, bottom };
 }
