@@ -11,23 +11,28 @@
   </head>
 
   <body>
-    <!-- <div id="startScreen">
+    <div id="startScreen">
       <div class="start-screen-container">
         <div class="title-container">
           <span class="title">打</span>
           <span class="title">砖</span>
           <span class="title">块</span>
         </div>
-        <button id="startButton" class="btn">开始游戏</button>
+        <button id="startButton" class="btn">PLAY</button>
+        <!-- <button>开始游戏</button> -->
       </div>
-    </div> -->
+    </div>
 
-    <!-- <div class="menu" id="menu">
-      <span class="menu-item btn" id="backHome">home</span>
-    </div> -->
+    <div id="onGame" hidden>
+      <div class="menu" id="menu">
+        <span class="menu-item btn" id="backHome">home</span>
+      </div>
 
-    <canvas id="gameCanvas" class="screen"></canvas>
-
+      <div class="main">
+        <div class="scoreBoard">Score: <span id="score">0</span></div>
+        <canvas id="gameCanvas" class="screen"></canvas>
+      </div>
+    </div>
     <!-- <div id="endScreen" class="screen" hidden>
       <p id="finalScore"></p>
       <button id="restartButton">重新开始</button>

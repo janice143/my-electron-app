@@ -1,5 +1,6 @@
 import {
   BALL_SHIFT_STEP,
+  BRICKS,
   BRICK_GAP,
   BRICK_HEIGHT,
   BRICK_OFFSET_LEFT,
@@ -27,14 +28,34 @@ export function deepClone(obj) {
   return JSON.parse(JSON.stringify(obj));
 }
 
-export function getBrickCoordinate(r, c) {
-  let brickX = c * (BRICK_WIDTH + BRICK_GAP) + BRICK_OFFSET_LEFT;
-  let brickY = r * (BRICK_HEIGHT + BRICK_GAP) + BRICK_OFFSET_TOP;
-
+export function getBrickCoordinate(brickX, brickY) {
   const left = brickX;
   const right = brickX + BRICK_WIDTH;
   const top = brickY;
   const bottom = brickY + BRICK_HEIGHT;
 
   return { left, right, top, bottom };
+}
+
+export function getBricks() {
+  const rows = BRICKS.length,
+    cols = BRICKS[0].length;
+  const bricks = Array.from({ length: rows }, () =>
+    Array.from({ length: cols }, () => ({})),
+  );
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (BRICKS[r][c] === 1) {
+        bricks[r][c].status = 1;
+        let brickX = c * (BRICK_WIDTH + BRICK_GAP) + BRICK_OFFSET_LEFT;
+        let brickY = r * (BRICK_HEIGHT + BRICK_GAP) + BRICK_OFFSET_TOP;
+        bricks[r][c].x = brickX;
+        bricks[r][c].y = brickY;
+      } else {
+        bricks[r][c].status = 0;
+      }
+    }
+  }
+  return bricks;
 }

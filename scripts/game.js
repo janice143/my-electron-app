@@ -18,9 +18,11 @@ import {
   drawBricks,
   drawPaddle,
 } from "./draw.js";
-import { deepClone, getBallCoordinate, getBrickCoordinate } from "./utils.js";
+import { getBallCoordinate, getBrickCoordinate, getBricks } from "./utils.js";
 
 const canvas = document.getElementById("gameCanvas");
+const scoreText = document.getElementById("score");
+
 const ctx = canvas.getContext("2d");
 
 canvas.width = CANVAS_WIDTH;
@@ -29,6 +31,8 @@ canvas.height = CANVAS_HEIGHT;
 // 监听按键
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
+
+// 游戏初始状态
 
 // 按键状态
 let rightPressed = false,
@@ -40,7 +44,8 @@ let [paddleX, paddleY] = [PADDLE_OFFSET_LEFT, PADDLE_OFFSET_TOP];
 let [ballX, ballY] = [BALL_OFFSET_LEFT, BALL_OFFSET_TOP];
 let angle = INITIAL_ANGLE;
 
-let bricks = deepClone(BRICKS);
+let bricks = getBricks(BRICKS);
+let score = 0;
 
 function keyDownHandler(e) {
   const { keyCode } = e;
@@ -75,7 +80,9 @@ function resetGame() {
   angle = INITIAL_ANGLE;
 
   // 砖块
-  bricks = deepClone(BRICKS);
+  bricks = getBricks(BRICKS);
+
+  score = 0;
 }
 
 function clearCanvas() {
@@ -88,6 +95,9 @@ function draw() {
   drawBall(ctx, ballX, ballY);
   drawBricks(ctx, bricks);
   drawPaddle(ctx, paddleX, paddleY);
+
+  // 游戏分数
+  scoreText.innerText = score;
 }
 
 function updatePaddle() {
@@ -136,17 +146,18 @@ function updateBall() {
     angle = -angle;
     ballY = paddleY - BALL_RADIUS;
   }
+  // hitBottom(paddleY, paddleX, paddleX + PADDLE_WIDTH);
 
   // 碰到了砖块
-  // hitBricks();
+  hitBricks();
 }
 
 function hitBricks() {
   // 砖块碰撞检测
   for (let r = 0; r < bricks.length; r++) {
     for (let c = 0; c < bricks[0].length; c++) {
-      if (bricks[r][c] === 1) {
-        hitEdge(r, c);
+      if (bricks[r][c].status === 1) {
+        hitEdge(bricks[r][c]);
       }
     }
   }
@@ -154,61 +165,68 @@ function hitBricks() {
   // 未碰到砖块
 }
 
-function removeBrick(r, c) {
+function doHitBrick(brick) {
   // 砖块被消除
-  bricks[r][c] === 0;
+  brick.status = 0;
+  // 计分
+  score++;
 }
 
-function hitEdge(r, c) {
-  const { left, right, top, bottom } = getBrickCoordinate(r, c);
+function hitEdge(brick) {
+  const { left, right, top, bottom } = getBrickCoordinate(brick.x, brick.y);
 
   // 碰到了右边
-  hitLeft(right, removeBrick);
+  hitLeft(right, top, bottom, () => doHitBrick(brick));
 
   // 碰到了右边
-  hitRight(left, removeBrick);
+  hitRight(left, top, bottom, () => doHitBrick(brick));
 
   // 碰到了上边
-  hitTop(bottom, removeBrick);
+  hitTop(bottom, left, right, () => doHitBrick(brick));
 
   // 碰到了下边
-  hitBottom(top, removeBrick);
+  hitBottom(top, left, right, () => doHitBrick(brick));
 }
 
-function hitLeft(left, hitCallback) {
-  const border = left + BALL_RADIUS;
-  if (ballX < border) {
+function hitLeft(pivot, top = 0, bottom = canvas.height, hitCallback) {
+  const right = pivot + BALL_RADIUS;
+  const left = pivot - BALL_RADIUS;
+  if (left <= ballX && ballX <= right && top <= ballY && ballY <= bottom) {
     angle =
       angle > 0 ? (180 - Math.abs(angle)) % 180 : (Math.abs(angle) - 180) % 180;
-    ballX = border;
+    ballX = right;
     hitCallback?.();
   }
 }
 
-function hitRight(right, hitCallback) {
-  const border = right - BALL_RADIUS;
-  if (ballX > border) {
+function hitRight(pivot, top = 0, bottom = canvas.height, hitCallback) {
+  const left = pivot - BALL_RADIUS;
+  const right = pivot + BALL_RADIUS;
+  if (left <= ballX && ballX <= right && top <= ballY && ballY <= bottom) {
     angle =
       angle > 0 ? (180 - Math.abs(angle)) % 180 : (Math.abs(angle) - 180) % 180;
-    ballX = border;
+    ballX = left;
     hitCallback?.();
   }
 }
 
-function hitTop(top, hitCallback) {
-  const border = top + BALL_RADIUS;
-  if (ballY < border) {
+// 球往上边撞
+function hitTop(pivot, left = 0, right = canvas.width, hitCallback) {
+  const bottom = pivot + BALL_RADIUS;
+  const top = pivot - BALL_RADIUS;
+  if (top <= ballY && ballY <= bottom && ballX >= left && ballX <= right) {
     angle = -angle;
-    ballY = border;
+    ballY = bottom;
     hitCallback?.();
   }
 }
 
-function hitBottom(bottom, hitCallback) {
-  const border = bottom - BALL_RADIUS;
-  if (ballY < border) {
+function hitBottom(pivot, left = 0, right = canvas.width, hitCallback) {
+  const top = pivot - BALL_RADIUS;
+  const bottom = pivot + BALL_RADIUS;
+  if (top <= ballY && ballY <= bottom && ballX >= left && ballX <= right) {
     angle = -angle;
-    ballY = border;
+    ballY = top;
     hitCallback?.();
   }
 }
