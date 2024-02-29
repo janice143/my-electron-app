@@ -1,15 +1,11 @@
 import {
-  BALL_OFFSET_LEFT,
-  BALL_OFFSET_TOP,
   BALL_RADIUS,
   BRICKS,
-  CANVAS_HEIGHT,
-  CANVAS_WIDTH,
+  BRICK_GAP,
+  BRICK_WIDTH,
   INITIAL_ANGLE,
   LEFT_KEY_CODES,
   PADDLE_HEIGHT,
-  PADDLE_OFFSET_LEFT,
-  PADDLE_OFFSET_TOP,
   PADDLE_SHIFT_STEP,
   PADDLE_WIDTH,
   RIGHT_KEY_CODES,
@@ -25,8 +21,22 @@ const scoreText = document.getElementById("score");
 
 const ctx = canvas.getContext("2d");
 
-canvas.width = CANVAS_WIDTH;
-canvas.height = CANVAS_HEIGHT;
+window.innerWidth = 1000;
+window.innerHeight = 900;
+
+canvas.width = window.innerWidth - 200;
+canvas.height = window.innerHeight - 300;
+
+let BALL_OFFSET_LEFT = canvas.width / 2; // 横向居中对齐
+let BALL_OFFSET_TOP = canvas.height * 0.8;
+
+let PADDLE_OFFSET_LEFT = BALL_OFFSET_LEFT - PADDLE_WIDTH / 2; // 横向和球一样
+let PADDLE_OFFSET_TOP = BALL_OFFSET_TOP + BALL_RADIUS; // 纵向位于球的下方
+
+// 水平居中
+let BRICK_OFFSET_TOP = 10;
+let BRICK_OFFSET_LEFT =
+  canvas.width / 2 - (BRICKS[0].length * (BRICK_WIDTH + BRICK_GAP)) / 2;
 
 // 监听按键
 document.addEventListener("keydown", keyDownHandler, false);
@@ -44,7 +54,7 @@ let [paddleX, paddleY] = [PADDLE_OFFSET_LEFT, PADDLE_OFFSET_TOP];
 let [ballX, ballY] = [BALL_OFFSET_LEFT, BALL_OFFSET_TOP];
 let angle = INITIAL_ANGLE;
 
-let bricks = getBricks(BRICKS);
+let bricks = getBricks(BRICK_OFFSET_LEFT, BRICK_OFFSET_TOP);
 let score = 0;
 
 function keyDownHandler(e) {
@@ -68,7 +78,7 @@ function keyUpHandler(e) {
   }
 }
 
-function resetGame() {
+export function resetGame() {
   // 按键状态
   rightPressed = false;
   leftPressed = false;
@@ -80,9 +90,13 @@ function resetGame() {
   angle = INITIAL_ANGLE;
 
   // 砖块
-  bricks = getBricks(BRICKS);
+  bricks = getBricks(BRICK_OFFSET_LEFT, BRICK_OFFSET_TOP);
 
   score = 0;
+}
+
+export function pauseGame() {
+  spacePressed = false;
 }
 
 function clearCanvas() {
@@ -170,6 +184,12 @@ function doHitBrick(brick) {
   brick.status = 0;
   // 计分
   score++;
+
+  // 如果砖块全部被消除了
+  if (bricks.every((row) => row.every((col) => col.status === 0))) {
+    alert("胜利");
+    resetGame();
+  }
 }
 
 function hitEdge(brick) {

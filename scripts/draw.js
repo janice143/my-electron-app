@@ -12,36 +12,34 @@ export const CANVAS_HEIGHT = 500;
 // 球
 export const BALL_RADIUS = 8;
 const BALL_COLOR = "#FFD700";
-export const BALL_OFFSET_LEFT = CANVAS_WIDTH / 2; // 横向居中对齐
-export const BALL_OFFSET_TOP = CANVAS_HEIGHT * 0.8;
+
 export const INITIAL_ANGLE = 30; // 起始发球角度，相对于x轴
-export const BALL_SHIFT_STEP = 4; // 横向移动距离
+
+// 调节球的速度
+export const BALL_SHIFT_STEP = 2; // 横向移动距离
 
 // 砖块
 export const BRICKS = [
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [0, 0, 0, 0, 1, 0, 0, 0],
+  // [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  // [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  // [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  // [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  // [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  // [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ];
+
 const BRICKS_COLOR_PALETTE = ["#FF6B6B", "#FFD93D", "#6BCB77", "#4D96FF"]; // Vibrant color palette
 
 export const BRICK_HEIGHT = 20;
 export const BRICK_WIDTH = 50;
 export const BRICK_GAP = 2;
-// 水平居中
-export const BRICK_OFFSET_TOP = 10;
-export const BRICK_OFFSET_LEFT =
-  CANVAS_WIDTH / 2 - (BRICKS[0].length * (BRICK_WIDTH + BRICK_GAP)) / 2;
 
 // 接板
 export const PADDLE_HEIGHT = 8;
 export const PADDLE_WIDTH = 80;
 const PADDLE_COLOR = "#FF6347";
-export const PADDLE_OFFSET_LEFT = BALL_OFFSET_LEFT - PADDLE_WIDTH / 2; // 横向和球一样
-export const PADDLE_OFFSET_TOP = BALL_OFFSET_TOP + BALL_RADIUS; // 纵向位于球的下方
+
 export const PADDLE_SHIFT_STEP = 7;
 
 export function drawBall(ctx, x, y) {

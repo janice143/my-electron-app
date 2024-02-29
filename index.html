@@ -14,29 +14,61 @@
     <div id="startScreen">
       <div class="start-screen-container">
         <div class="title-container">
-          <span class="title">打</span>
-          <span class="title">砖</span>
-          <span class="title">块</span>
+          <span class="title">BRICKS</span>
+          <span class="title">BREAKER</span>
+          <span class="title">GAME</span>
         </div>
         <button id="startButton" class="btn">PLAY</button>
-        <!-- <button>开始游戏</button> -->
       </div>
     </div>
 
     <div id="onGame" hidden>
       <div class="menu" id="menu">
-        <span class="menu-item btn" id="backHome">home</span>
+        <span class="menu-item btn" id="home">home</span>
+        <span class="menu-item btn" id="help">help</span>
       </div>
 
       <div class="main">
         <div class="scoreBoard">Score: <span id="score">0</span></div>
         <canvas id="gameCanvas" class="screen"></canvas>
       </div>
+
+      <div class="pop-up" id="popUp">
+        <div class="pop-up__title">
+          How to play the game
+          <svg
+            class="close btn"
+            id="popUpCloseBtn"
+            width="24"
+            height="24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="feather feather-x-circle"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="M15 9l-6 6M9 9l6 6" />
+          </svg>
+        </div>
+        <div class="pop-up__subtitle">
+          - Press the <strong>SPACE</strong> key to start or pause the game
+        </div>
+        <div class="pop-up__subtitle">
+          - Use the <strong>ARROW</strong> keys or <strong>A/D</strong> keys to
+          move the paddle
+        </div>
+        <div class="pop-up__subtitle">
+          - Try your best to catch the falling ball
+        </div>
+        <div class="footer-wrapper center">
+          <button class="footer-button confirm" id="popUpConfirmBtn">
+            Noted
+          </button>
+        </div>
+      </div>
     </div>
-    <!-- <div id="endScreen" class="screen" hidden>
-      <p id="finalScore"></p>
-      <button id="restartButton">重新开始</button>
-    </div> -->
 
     <script type="module" src="./scripts/start.js"></script>
   </body>

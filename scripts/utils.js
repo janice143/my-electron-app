@@ -3,8 +3,6 @@ import {
   BRICKS,
   BRICK_GAP,
   BRICK_HEIGHT,
-  BRICK_OFFSET_LEFT,
-  BRICK_OFFSET_TOP,
   BRICK_WIDTH,
 } from "./draw.js";
 // 根据起始角度和位置计算移动的距离
@@ -37,7 +35,7 @@ export function getBrickCoordinate(brickX, brickY) {
   return { left, right, top, bottom };
 }
 
-export function getBricks() {
+export function getBricks(BRICK_OFFSET_LEFT, BRICK_OFFSET_TOP) {
   const rows = BRICKS.length,
     cols = BRICKS[0].length;
   const bricks = Array.from({ length: rows }, () =>
