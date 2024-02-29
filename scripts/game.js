@@ -1,7 +1,5 @@
 import {
   BALL_RADIUS,
-  BRICK_GAP,
-  BRICK_WIDTH,
   INITIAL_ANGLE,
   LEFT_KEY_CODES,
   LEVEL,
@@ -22,7 +20,7 @@ const scoreText = document.getElementById("score");
 const ctx = canvas.getContext("2d");
 
 window.innerWidth = 1000;
-window.innerHeight = 900;
+window.innerHeight = 750;
 
 canvas.width = window.innerWidth - 200;
 canvas.height = window.innerHeight - 300;
@@ -35,11 +33,6 @@ let PADDLE_OFFSET_TOP = BALL_OFFSET_TOP + BALL_RADIUS; // 纵向位于球的下�
 
 let curLevel = 0;
 const CUR_BRICKS = LEVEL[curLevel];
-
-// 水平居中
-let BRICK_OFFSET_TOP = 10;
-let BRICK_OFFSET_LEFT =
-  canvas.width / 2 - (CUR_BRICKS[0].length * (BRICK_WIDTH + BRICK_GAP)) / 2;
 
 // 监听按键
 document.addEventListener("keydown", keyDownHandler, false);
@@ -57,9 +50,10 @@ let [paddleX, paddleY] = [PADDLE_OFFSET_LEFT, PADDLE_OFFSET_TOP];
 let [ballX, ballY] = [BALL_OFFSET_LEFT, BALL_OFFSET_TOP];
 let angle = INITIAL_ANGLE;
 
-let bricks = getBricks(CUR_BRICKS, BRICK_OFFSET_LEFT, BRICK_OFFSET_TOP);
+let bricks = getBricks(CUR_BRICKS, canvas.width);
 
-let score = 0;
+let score = 0,
+  preScore = 0;
 
 function keyDownHandler(e) {
   const { keyCode } = e;
@@ -94,17 +88,21 @@ export function resetGame(level) {
   angle = INITIAL_ANGLE;
 
   // 砖块
-  bricks = getBricks(LEVEL[level || 0], BRICK_OFFSET_LEFT, BRICK_OFFSET_TOP);
-
-  score = 0;
+  bricks = getBricks(LEVEL[level || 0], canvas.width);
+  // 当前关：分数重置
+  if (level === curLevel) {
+    score = preScore;
+  } else {
+    // 下一关：分数累加
+    preScore = score;
+    curLevel = level;
+  }
 }
 
 function getNextLevel(cur) {
   if (cur === LEVEL.length - 1) {
-    curLevel = 0;
     return 0;
   }
-  curLevel = cur + 1;
   return cur + 1;
 }
 

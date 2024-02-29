@@ -34,7 +34,12 @@ export function getBrickCoordinate(brickX, brickY) {
   return { left, right, top, bottom };
 }
 
-export function getBricks(BRICKS, BRICK_OFFSET_LEFT, BRICK_OFFSET_TOP) {
+export function getBricks(BRICKS, CANVAS_WIDTH) {
+  // 水平居中
+  let BRICK_OFFSET_TOP = 10;
+  let BRICK_OFFSET_LEFT =
+    CANVAS_WIDTH / 2 - (BRICKS[0].length * (BRICK_WIDTH + BRICK_GAP)) / 2;
+
   const rows = BRICKS.length,
     cols = BRICKS[0].length;
   const bricks = Array.from({ length: rows }, () =>
