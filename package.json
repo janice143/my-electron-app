@@ -15,10 +15,10 @@
     "productName": "bricks-breaker-game",
     "mac": {
       "category": "game",
-      "icon": "assets/bbg.png"
+      "icon": "assets/image/bbg.png"
     },
     "win": {
-      "icon": "assets/bbg.png",
+      "icon": "assets/image/bbg.png",
       "target": "nsis"
     }
   },

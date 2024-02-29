@@ -15,10 +15,10 @@ function createWindow() {
   win.loadFile("index.html");
 }
 
-// require("electron-reload")(__dirname, {
-//   electron: require(`${__dirname}/node_modules/electron`),
-// });
-// console.log("\n🚀 ~ refreshed");
+require("electron-reload")(__dirname, {
+  electron: require(`${__dirname}/node_modules/electron`),
+});
+console.log("\n🚀 ~ refreshed");
 
 app.whenReady().then(createWindow);
 

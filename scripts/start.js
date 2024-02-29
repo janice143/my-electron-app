@@ -1,4 +1,9 @@
 import { gameLoop, pauseGame, resetGame } from "./game.js";
+import { pauseAudio, playAudio, switchAudio } from "./sound.js";
+
+document.addEventListener("DOMContentLoaded", (event) => {
+  playAudio();
+});
 
 document.getElementById("startButton")?.addEventListener("click", async () => {
   startGame();
@@ -20,6 +25,12 @@ document.getElementById("popUpCloseBtn")?.addEventListener("click", () => {
   togglePopUp(false);
 });
 
+window.addEventListener("resize", () => {
+  const canvas = document.getElementById("gameCanvas");
+  canvas.width = window.innerWidth - 200;
+  canvas.height = window.innerHeight - 300;
+});
+
 function togglePopUp(flag) {
   if (flag) {
     document.getElementById("popUp").classList.add("visible");
@@ -33,16 +44,12 @@ function backHome() {
   document.getElementById("startScreen").style.display = "block";
   document.getElementById("onGame").style.display = "none";
   resetGame();
+  switchAudio(0);
 }
 
 function startGame() {
   document.getElementById("startScreen").style.display = "none";
   document.getElementById("onGame").style.display = "block";
   gameLoop();
+  switchAudio(1);
 }
-
-window.addEventListener("resize", () => {
-  const canvas = document.getElementById("gameCanvas");
-  canvas.width = window.innerWidth - 200;
-  canvas.height = window.innerHeight - 300;
-});

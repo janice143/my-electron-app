@@ -16,7 +16,7 @@ const BALL_COLOR = "#FFD700";
 export const INITIAL_ANGLE = 30; // 起始发球角度，相对于x轴
 
 // 调节球的速度
-export const BALL_SHIFT_STEP = 2; // 横向移动距离
+export const BALL_SHIFT_STEP = 3; // 横向移动距离
 
 // 砖块布局
 const BRICKS_1 = [

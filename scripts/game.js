@@ -12,6 +12,7 @@ import {
   drawBricks,
   drawPaddle,
 } from "./draw.js";
+import { pauseAudio, playAudio, switchAudio } from "./sound.js";
 import { getBallCoordinate, getBrickCoordinate, getBricks } from "./utils.js";
 
 const canvas = document.getElementById("gameCanvas");
@@ -73,6 +74,11 @@ function keyUpHandler(e) {
   } else if (SPACE_KEY_CODE === keyCode) {
     // 发球
     spacePressed = !spacePressed;
+    if (spacePressed === false) {
+      pauseAudio();
+    } else {
+      playAudio();
+    }
   }
 }
 
@@ -97,6 +103,7 @@ export function resetGame(level) {
     preScore = score;
     curLevel = level;
   }
+  switchAudio(level + 1);
 }
 
 function getNextLevel(cur) {
