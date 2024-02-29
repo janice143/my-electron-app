@@ -4,22 +4,38 @@
   "main": "index.js",
   "scripts": {
     "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win --x64",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
+  "build": {
+    "appId": "your.id",
+    "productName": "bricks-breaker-game",
+    "mac": {
+      "category": "game",
+      "icon": "assets/bbg.png"
+    },
+    "win": {
+      "icon": "assets/bbg.png",
+      "target": "nsis"
+    }
+  },
+  "postinstall": "electron-builder install-app-deps",
   "author": "lanyanping",
   "license": "MIT",
   "devDependencies": {
     "@types/electron": "^1.6.10",
     "@types/node": "^20.11.19",
-    "electron": "^29.0.0"
-  },
-  "dependencies": {
-    "electron-reload": "^2.0.0-alpha.1",
+    "electron": "^29.0.0",
+    "electron-builder": "^24.12.0",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
     "prettier": "^3.2.5"
+  },
+  "dependencies": {
+    "electron-reload": "^2.0.0-alpha.1"
   }
 }

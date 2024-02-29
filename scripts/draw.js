@@ -18,8 +18,8 @@ export const INITIAL_ANGLE = 30; // 起始发球角度，相对于x轴
 // 调节球的速度
 export const BALL_SHIFT_STEP = 2; // 横向移动距离
 
-// 砖块
-export const BRICKS = [
+// 砖块布局
+const BRICKS_1 = [
   [0, 0, 0, 0, 1, 0, 0, 0],
   // [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
   // [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -28,6 +28,17 @@ export const BRICKS = [
   // [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
   // [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 ];
+const BRICKS_2 = [
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+];
+
+// 关卡
+export const LEVEL = [BRICKS_1, BRICKS_2];
 
 const BRICKS_COLOR_PALETTE = ["#FF6B6B", "#FFD93D", "#6BCB77", "#4D96FF"]; // Vibrant color palette
 

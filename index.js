@@ -1,5 +1,4 @@
 const { app, BrowserWindow } = require("electron/main");
-const path = require("node:path");
 
 function createWindow() {
   const WINDOW_WIDTH = 1000;
@@ -9,7 +8,6 @@ function createWindow() {
     width: WINDOW_WIDTH,
     height: WINDOW_HEIGHT,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
     },
   });
@@ -17,11 +15,11 @@ function createWindow() {
   win.loadFile("index.html");
 }
 
-require("electron-reload")(__dirname, {
-  electron: require(`${__dirname}/node_modules/electron`),
-});
+// require("electron-reload")(__dirname, {
+//   electron: require(`${__dirname}/node_modules/electron`),
+// });
 
-console.log("\n🚀 ~ refreshed");
+// console.log("\n🚀 ~ refreshed");
 
 app.whenReady().then(createWindow);
 

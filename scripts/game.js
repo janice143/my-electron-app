@@ -1,10 +1,10 @@
 import {
   BALL_RADIUS,
-  BRICKS,
   BRICK_GAP,
   BRICK_WIDTH,
   INITIAL_ANGLE,
   LEFT_KEY_CODES,
+  LEVEL,
   PADDLE_HEIGHT,
   PADDLE_SHIFT_STEP,
   PADDLE_WIDTH,
@@ -33,10 +33,13 @@ let BALL_OFFSET_TOP = canvas.height * 0.8;
 let PADDLE_OFFSET_LEFT = BALL_OFFSET_LEFT - PADDLE_WIDTH / 2; // 横向和球一样
 let PADDLE_OFFSET_TOP = BALL_OFFSET_TOP + BALL_RADIUS; // 纵向位于球的下方
 
+let curLevel = 0;
+const CUR_BRICKS = LEVEL[curLevel];
+
 // 水平居中
 let BRICK_OFFSET_TOP = 10;
 let BRICK_OFFSET_LEFT =
-  canvas.width / 2 - (BRICKS[0].length * (BRICK_WIDTH + BRICK_GAP)) / 2;
+  canvas.width / 2 - (CUR_BRICKS[0].length * (BRICK_WIDTH + BRICK_GAP)) / 2;
 
 // 监听按键
 document.addEventListener("keydown", keyDownHandler, false);
@@ -54,7 +57,8 @@ let [paddleX, paddleY] = [PADDLE_OFFSET_LEFT, PADDLE_OFFSET_TOP];
 let [ballX, ballY] = [BALL_OFFSET_LEFT, BALL_OFFSET_TOP];
 let angle = INITIAL_ANGLE;
 
-let bricks = getBricks(BRICK_OFFSET_LEFT, BRICK_OFFSET_TOP);
+let bricks = getBricks(CUR_BRICKS, BRICK_OFFSET_LEFT, BRICK_OFFSET_TOP);
+
 let score = 0;
 
 function keyDownHandler(e) {
@@ -78,7 +82,7 @@ function keyUpHandler(e) {
   }
 }
 
-export function resetGame() {
+export function resetGame(level) {
   // 按键状态
   rightPressed = false;
   leftPressed = false;
@@ -90,9 +94,18 @@ export function resetGame() {
   angle = INITIAL_ANGLE;
 
   // 砖块
-  bricks = getBricks(BRICK_OFFSET_LEFT, BRICK_OFFSET_TOP);
+  bricks = getBricks(LEVEL[level || 0], BRICK_OFFSET_LEFT, BRICK_OFFSET_TOP);
 
   score = 0;
+}
+
+function getNextLevel(cur) {
+  if (cur === LEVEL.length - 1) {
+    curLevel = 0;
+    return 0;
+  }
+  curLevel = cur + 1;
+  return cur + 1;
 }
 
 export function pauseGame() {
@@ -136,7 +149,7 @@ function updateBall() {
   // 没有接到球：球的最下方超过了板子的最下方
   if (ballY + BALL_RADIUS > paddleY + PADDLE_HEIGHT) {
     alert("失败");
-    resetGame();
+    resetGame(curLevel);
     return;
   }
 
@@ -188,7 +201,7 @@ function doHitBrick(brick) {
   // 如果砖块全部被消除了
   if (bricks.every((row) => row.every((col) => col.status === 0))) {
     alert("胜利");
-    resetGame();
+    resetGame(getNextLevel(curLevel));
   }
 }
 

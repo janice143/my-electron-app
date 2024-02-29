@@ -1,6 +1,5 @@
 import {
   BALL_SHIFT_STEP,
-  BRICKS,
   BRICK_GAP,
   BRICK_HEIGHT,
   BRICK_WIDTH,
@@ -35,7 +34,7 @@ export function getBrickCoordinate(brickX, brickY) {
   return { left, right, top, bottom };
 }
 
-export function getBricks(BRICK_OFFSET_LEFT, BRICK_OFFSET_TOP) {
+export function getBricks(BRICKS, BRICK_OFFSET_LEFT, BRICK_OFFSET_TOP) {
   const rows = BRICKS.length,
     cols = BRICKS[0].length;
   const bricks = Array.from({ length: rows }, () =>
