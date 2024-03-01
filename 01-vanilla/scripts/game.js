@@ -93,6 +93,15 @@ export function resetGame(level) {
   [ballX, ballY] = [BALL_OFFSET_LEFT, BALL_OFFSET_TOP];
   angle = INITIAL_ANGLE;
 
+  // 回到首页
+  if (level === -1) {
+    score = 0;
+    preScore = 0;
+    curLevel = 0;
+    bricks = getBricks(LEVEL[0], canvas.width);
+    return;
+  }
+
   // 砖块
   bricks = getBricks(LEVEL[level || 0], canvas.width);
   // 当前关：分数重置
@@ -103,6 +112,7 @@ export function resetGame(level) {
     preScore = score;
     curLevel = level;
   }
+
   switchAudio(level + 1);
 }
 
