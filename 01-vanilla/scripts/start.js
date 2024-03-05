@@ -1,7 +1,7 @@
 import { gameLoop, pauseGame, resetGame } from "./game.js";
-import { pauseAudio, playAudio, switchAudio } from "./sound.js";
+import { playAudio, switchAudio } from "./sound.js";
 
-document.addEventListener("DOMContentLoaded", (event) => {
+document.addEventListener("DOMContentLoaded", () => {
   playAudio();
 });
 
@@ -43,7 +43,7 @@ function togglePopUp(flag) {
 function backHome() {
   document.getElementById("startScreen").style.display = "block";
   document.getElementById("onGame").style.display = "none";
-  resetGame();
+  resetGame(-1);
   switchAudio(0);
 }
 
@@ -51,5 +51,4 @@ function startGame() {
   document.getElementById("startScreen").style.display = "none";
   document.getElementById("onGame").style.display = "block";
   gameLoop();
-  switchAudio(1);
 }
